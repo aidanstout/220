@@ -1,11 +1,14 @@
 """
-Name: <your name goes here – first and last>
-<ProgramName>.py
+Name: Aidan Stout
+lab9.py
+Problem: create a program to play tic-tac-toe
+I certify that this lab is entirely my work
 """
 
 
 def build_board():
-    pass
+    board = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    return board
 
 
 def print_board(board):
@@ -37,31 +40,85 @@ def print_board(board):
 
 
 def is_legal(board, position):
-    pass
+    if str(board[position - 1]).isnumeric():
+        return True
+    return False
 
 
-def fill_spot(board, position, character):
-    pass
+def fill_spot(board, position, shape):
+    shape = shape.strip()
+    shape = shape.lower()
+    board[position - 1] = shape
 
 
-def winning_game(board):
-    pass
+def game_is_won(board):
+    for i in range(0, len(board), 3):  # rows
+        if board[i] == board[i + 1] == board[i + 2]:
+            return True
+
+    for i in range(0, (len(board) - 6)):  # columns
+        if board[i] == board[i + 3] == board[i + 6]:
+            return True
+
+    if board[0] == board[4] == board[8]:
+        return True
+    if board[2] == board[4] == board[6]:
+        return True
+    return False
 
 
 def game_over(board):
-    pass
+    if game_is_won(board):
+        return True
+    for i in range(len(board)):
+        if is_legal(board, i):
+            return False
+    return True
 
 
 def get_winner(board):
-    pass
+    if not game_over(board):
+        return None
+    x_count = 0
+    o_count = 0
+    for i in range(len(board)):
+        if i == 'x':
+            x_count = x_count + 1
+        if i == 'o':
+            o_count = o_count + 1
+    if x_count > o_count:
+        return 'x'
+    else:
+        return 'o'
 
 
 def play(board):
-    pass
+    print("Instructions: Players will take turns placing their shape (x or o) "
+          "on a square by entering the number where they want to play.")
+    play_again = 'y'
+    while play_again.startswith('y'):
+        while not game_over(board):
+            position_x = eval(input("x's turn:"))
+            if is_legal(board, position_x) is True:
+                fill_spot(board, position_x, 'x')
+            else:
+                print("That spot is already taken. Pick again:")
+            position_o = eval(input("o's turn:"))
+            if is_legal(board, position_o) is True:
+                fill_spot(board, position_o, 'o')
+            else:
+                print("That spot is already taken. Pick again:")
+        if get_winner(board) == 'x':
+            print("x's win!")
+        if get_winner(board) == 'o':
+            print("o's win!")
+        if get_winner(board) is None:
+            print("it's a tie!")
+        play_again = input("do you want to play again?")
 
 
 def main():
-    pass
+    play(build_board())
 
 
 if __name__ == '__main__':
